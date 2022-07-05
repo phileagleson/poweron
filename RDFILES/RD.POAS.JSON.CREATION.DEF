@@ -1,0 +1,67 @@
+[
+ RD.POAS.JSON.CREATION.DEF
+
+-Abstract:
+ This include file contains variable definitions needed for
+ PowerOn as a Service programs to use standardized
+ procedures to create response JSON.
+
+-History:
+ Proj. 17.067 Release 2018.00 2/9/2018 William Morgan Original Author
+ Proj. 18.016 Release 2019.00 08/08/2018 kschweers - Moved J from here to
+              RD.POAS.VARIABLES.DEF.
+
+-Details:
+ The variables defined are required for the following include files:
+ RD.JSON.CREATION.SET
+ RD.JSON.CREATION.PRO
+
+ This set of include files streamlines the development of PowerOn as a
+ Service specfiles by providing a standardized process to create
+ response JSON.
+
+ Special characters are required to identify the beginning and the
+ end of a JSON so that the Java service can extract the response
+ JSON from the other messages being sent by Episys Quest.
+
+-Dependences:
+ RD.JSON.CREATION.SET
+ RD.JSON.CREATION.PRO
+
+-History:
+ Proj 18.016 Release 2019.00 8/8/2018 kschweers.  Added START/CONTINUE/END tags.
+]
+
+ [ Constants ]
+ POASJSONMAXJSON=9999               [ Maximum dimension of the "JSON" array    ]
+ POASJSONSTARTMARK="#POAS_START#"   [ Start JSON syntax marker                 ]
+ POASJSONCONTMARK="#POAS_CONTINUE#" [ Continue JSON syntax marker              ]
+ POASJSONENDMARK="#POAS_END#"       [ End JSON syntax marker                   ]
+
+ [ Variables ]
+ POASJSONJ=NUMBER
+ POASJSONCNTR=NUMBER
+ JSON=CHARACTER ARRAY(9999)          [ Holds the JSON syntax until written     ]
+ MAINOBJNAME=CHARACTER(40)
+ DATAOBJNAME=CHARACTER(40)
+ JSONCTR=NUMBER
+ NUMHEADERFIELDS=NUMBER
+ ERRORMSGCTR=NUMBER
+ ERRORMSG=CHARACTER(100) ARRAY(99)
+ TEMPCHAR=CHARACTER
+ Q=CHARACTER(1)
+ BEGINMSG=CHARACTER(1)
+ ENDMSG=CHARACTER(1)
+ ESCAPECHAR=CHARACTER(1)
+ STATUSTYPE=CHARACTER(20)
+ INPUTMESSAGEID=CHARACTER
+ MSGLENGTH=NUMBER
+ POASJSONFIELD=CHARACTER             [ The field name creating a JSON entry    ]
+ POASJSONVALUECHAR=CHARACTER         [ A character value creating a JSON entry ]
+ POASJSONVALUENUM=NUMBER             [ A number value creating a JSON entry    ]
+ POASJSONVALUEMONEY=MONEY            [ A money value creating a JSON entry     ]
+ POASJSONVALUERATE=RATE              [ A rate value creating a JSON entry      ]
+ POASJSONVALUEDATE=DATE              [ A date value creating a JSON entry      ]
+ POASJSONVALUETIME=NUMBER            [ A time value creating a JSON entry      ]
+ POASJSONMESSAGE=CHARACTER(100)      [ A single message to be held in ERRORMSG ]
+ POASJSONMARKER=CHARACTER            [ #CONTINUE# OR #END# marker depending    ]

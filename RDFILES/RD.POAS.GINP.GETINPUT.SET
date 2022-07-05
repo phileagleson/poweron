@@ -1,0 +1,48 @@
+[
+ RD.POAS.GINP.GETINPUT.SET
+
+-Abstract:
+ This is include file contains variable assignments for the GETINPUT procedure.
+
+-History:
+ Proj. 17.109 Release 2018.01 05/15/2018 kschweers - Initially created.
+ Proj. 12.114.11 Release 2020.00 10/31/2019 kschweers - Added new field
+  for "serviceTag".
+
+-Details:
+ Variable initialization required by the GETINPUT procedure.
+
+-Dependencies:
+ RD.POAS.CONSTANTS.DEF
+ RD.POAS.GINP.GETINPUT.DEF
+]
+
+ POASGINPMESSAGEIDSW=TRUE    [ Required? ]
+ POASGINPACCOUNTSW=FALSE     [ Required? ]
+ POASGINPSHAREIDSW=FALSE     [ Required? ]
+ POASGINPLOANIDSW=FALSE      [ Required? ]
+ POASGINPSTARTDATESW=FALSE   [ Required? ]
+ POASGINPENDDATESW=FALSE     [ Required? ]
+ POASGINPEFFDATESW=FALSE     [ Required? ]
+ POASGINPEXPDATESW=FALSE     [ Required? ]
+ POASGINPTRANTYPESW=FALSE    [ Required? ]
+ POASGINPREQTYPESW=FALSE     [ Required? ]
+ POASGINPDESCRIPTIONSW=FALSE [ Required? ]
+ POASGINPIDSW=FALSE          [ Required? ]
+ POASGINPINSTRTYPESW=FALSE   [ Required? ]
+ POASGINPSERVICETAGSW=FALSE  [ Required? ]
+
+ POASGINPMESSAGEID=""
+ POASGINPACCOUNT=""
+ POASGINPSHAREID=""
+ POASGINPLOANID=""
+ POASGINPSTARTDATE='--/--/--'
+ POASGINPENDDATE='--/--/--'
+ POASGINPEFFDATE='--/--/--'
+ POASGINPEXPDATE='--/--/--'
+ POASGINPTRANTYPE=""
+ POASGINPREQTYPE=""
+ POASGINPDESCRIPTION=""
+ POASGINPID=""
+ POASGINPINSTRTYPE=""
+ POASGINPSERVICETAG=""

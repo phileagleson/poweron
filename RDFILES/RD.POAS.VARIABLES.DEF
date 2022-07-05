@@ -1,0 +1,20 @@
+[
+ RD.POAS.VARIABLES.DEF
+
+-Abstract:
+ This is include file contains common variable definitions.
+
+-History:
+ Proj. 17.109 Release 2018.01 05/15/2018 kschweers - Initially created.
+ Proj. 18.016 Release 2019.00 08/08/2018 kschweers - Move J here from
+              RD.POAS.JSON.CREATION.DEF.
+
+-Details:
+ Defines common variables used across multiple programs.
+
+-Dependencies:
+ None.
+]
+
+ I=NUMBER
+ J=NUMBER

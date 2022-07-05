@@ -1,0 +1,25 @@
+[
+ RD.POAS.TXTP.TEXTPARSE.SET
+
+-Abstract:
+ This is include file initializes variables used by the Text Parse routines. 
+  
+-History:
+ Proj. 17.109 Release 2018.01 05/30/2018 kschweers - Initially created.
+ Proj. 18.017 Release 2019.01 05/30/2018 William Morgan - Modified.
+
+-Details:
+ Variable initialization needed by the Text Parse procedures.
+]
+
+ [ Unsafe characters and what they should be replaced with. ]
+
+  POASTXTPBACKSPACE      = CTRLCHR(8)                      [ Backspace         ]
+  POASTXTPFF             = CTRLCHR(12)                     [ Form Feed         ]
+  POASTXTPLF             = CTRLCHR(10)                     [ Line feed         ]
+  POASTXTPCR             = CTRLCHR(13)                     [ Carriage Return   ]
+  POASTXTPTAB            = CTRLCHR(9)                      [ Tab               ]
+  POASTXTPDOUBLEQUOTE    = CTRLCHR(34)                     [ Double Quote      ]
+  POASTXTPBACKSLASH      = "\"                             [ Backslash         ]
+  POASTXTPUNSAFECHARS(1)=CTRLCHR(34)                       [ Double Quote      ]
+  POASTXTPUNSAFECHARS(2)="\"                               [ Backslash         ]

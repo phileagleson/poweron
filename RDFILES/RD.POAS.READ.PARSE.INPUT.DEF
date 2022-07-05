@@ -1,0 +1,56 @@
+[
+ RD.POAS.READ.PARSE.INPUT.DEF
+
+-Abstract:
+ This include file contains variable definitions needed for
+ PowerOn as a Service programs to use standardized
+ procedures to read in and parse input.
+
+-History:
+ Proj. 17.067 Release 2018.00 2/9/2018 William Morgan Original Author
+ PowerOn as a Service programs to use standardized
+ procedures to read in and parse input.
+
+-History:
+ Proj. 17.067 Release 2018.00 2/9/2018 William Morgan Original Author
+ Proj. 18.017 Release 2019.01 3/13/2019 kschweers.  Changed definition of name 
+  and value variables to just CHARACTER with no length.  With long names and 
+  nested arrays, the concatenated name could be easily truncated.
+
+-Details:
+ The variables defined are required for the following include files:
+ RD.READ.PARSE.INPUT.PRO
+
+ These variables are used to capture input being passed into the
+ PowerOn as a Service specfiles. The variables are broken up into
+ three groups.
+
+ Those needed for specfiles that are receiving:
+  single objects
+  arrays of objects
+  required by all specfiles
+
+-Dependences:
+ RD.READ.PARSE.INPUT.PRO
+]
+
+ [Variables needed for single objects]
+ INPUTCTR=NUMBER
+ INPUTLINE=CHARACTER(81) ARRAY(999)
+ NAMEARRAY=CHARACTER ARRAY(999)
+ VALUEARRAY=CHARACTER ARRAY(999)
+
+ [Variables needed for arrays of objects]
+ OBJFIELDNAMES=CHARACTER ARRAY(999)
+ OBJFIELDVALUES=CHARACTER ARRAY(999)
+ OBJFIELDSMAX=NUMBER
+ INITCTR=NUMBER
+ FIELDCTR=NUMBER
+ RAWNAMEVALUE=CHARACTER(81)
+ NAMESEG=CHARACTER(40)
+ VALUESEG=CHARACTER(40)
+ MESSAGEID=CHARACTER
+ ACCTNUM=CHARACTER(10)
+
+ [Variables needed for all specfiles]
+ PARSELOC=NUMBER

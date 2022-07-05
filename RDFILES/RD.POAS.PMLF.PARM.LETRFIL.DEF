@@ -1,0 +1,60 @@
+[
+ RD.POAS.PMLF.PARM.LETRFIL.DEF
+
+-Abstract:
+ This is include file contains variable definitions for the Parameter Letter 
+ File procedures.
+  
+-History:
+ Proj. 17.109 Release 2018.01 05/16/2018 kschweers - Initially created.
+
+-Details:
+ Variables needed by the procedures which process a Parameter Letter File 
+ into arrays.  
+ 
+ Each POASPMLFPARM array holds a positional parameter read in from a Letter File
+ delimited by the pipe "|".  
+ 
+ That parameter may just be a simple value or it could be in the form 
+ "keyword:value".  Keywords, if present, are stored in the "0" second subscript.  
+ Values are always stored in the "1" second subscript.
+ 
+ The first subscript of the array corresponds to the records read.
+
+-Dependencies:
+ None.
+]
+
+ [ Constants ]
+ POASPMLFMAXRECS=100           [ Maximum number of parameter records supported ]
+ POASPMLFMAXPARMS=10           [ Maximum number of parameters on any one line  ]
+ POASPMLFSUBKWD=0              [ Keyword subscript in the parameter arrays     ]
+ POASPMLFSUBVAL=1              [ Value subscript in the parameter arrays       ]
+ 
+ [ Variables ]
+ POASPMLFNUMRECS=NUMBER        [ Number of parameter records read up to max    ]
+ POASPMLFNUMPARMS=NUMBER       [ Greatest number of parameters on any one line ] 
+ POASPMLFRECPARMS=NUMBER       [ Number of parameters on the current record    ]
+ POASPMLFINPUTFILE=CHARACTER   [ Name of the Parameter Letter File             ]
+ POASPMLFNUM=NUMBER            [ File Number                                   ]
+ POASPMLFERROR=CHARACTER       [ File Error                                    ]
+ POASPMLFLINE=CHARACTER        [ One line from the Letter File                 ]
+ POASPMLFPARM=CHARACTER        [ Parameter text                                ]
+ POASPMLFKEY=CHARACTER         [ Keyword label                                 ]
+ POASPMLFVALUE=CHARACTER       [ Keyword value                                 ]
+ POASPMLFPIPEPOS=NUMBER        [ Column where pipe "|" found                   ]
+ POASPMLFLINEDONE=NUMBER       [ Boolean.  Record is finished processing       ]
+ POASPMLFCOLONPOS=NUMBER       [ Column where colon ":" found                  ]
+ POASPMLFI=NUMBER              [ Generic subscript                             ]
+ 
+ [ Arrays ]
+ POASPMLFPARM1=CHARACTER ARRAY(100,1) [ 1st parameter all records keyword,value]
+ POASPMLFPARM2=CHARACTER ARRAY(100,1) [ 2nd parameter all records keyword,value]
+ POASPMLFPARM3=CHARACTER ARRAY(100,1) [ 3rd parameter all records keyword,value]
+ POASPMLFPARM4=CHARACTER ARRAY(100,1) [ 4th parameter all records keyword,value]
+ POASPMLFPARM5=CHARACTER ARRAY(100,1) [ 5th parameter all records keyword,value]
+ POASPMLFPARM6=CHARACTER ARRAY(100,1) [ 6th parameter all records keyword,value]
+ POASPMLFPARM7=CHARACTER ARRAY(100,1) [ 7th parameter all records keyword,value]
+ POASPMLFPARM8=CHARACTER ARRAY(100,1) [ 8th parameter all records keyword,value]
+ POASPMLFPARM9=CHARACTER ARRAY(100,1) [ 9th parameter all records keyword,value]
+ POASPMLFPARMA=CHARACTER ARRAY(100,1) [ 10th parameter all record keyword,value]

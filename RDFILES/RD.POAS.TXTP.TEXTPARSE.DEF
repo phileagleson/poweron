@@ -1,0 +1,84 @@
+[
+ RD.POAS.TXTP.TEXTPARSE.DEF
+
+-Abstract:
+ This is include file defines variables used by the Text Parse routines. 
+  
+-History:
+ Proj. 17.109 Release 2018.01 05/16/2018 kschweers - Initially created.
+ Proj. 18.016 Release 2019.00 11/28/2018 kschweers - Adding numeric edit rtns.
+ Def.  1148278 fix to 2019.00 and 2019.01 - wmorgan - converting to letter file.
+
+-Details:
+ Variables needed by the Text Parse procedures.
+
+-Dependencies:
+ None.
+]
+
+ [ Constants ]
+ POASTXTPMAXNUMRANGE=99            [ Maximum number of Number Ranges supported ]
+ POASTXTPSUBNUMFROM=0              [ From number subscript in POASTXTPNUMRNG   ]
+ POASTXTPSUBNUMTHRU=1              [ Thru number subscript in POASTXTPNUMRNG   ]
+ POASTXTPMAXUNSAFE=7               [ Maximum number of unsafe characters       ]
+ POASTXTPMAXLIST=50                [ Maximum number of list values             ]
+ POASTXTPFMTMNY="M"                [ Money format                              ]
+ POASTXTPFMTNUM="N"                [ Number format                             ]
+ POASTXTPFMTCOD="O"                [ Numeric Code format                       ]
+ POASTXTPFMTDAT="D"                [ Date format                               ]
+ POASTXTPFMTTIM="T"                [ Time format                               ]
+ POASTXTPFMTRAT="R"                [ Rate format                               ]
+ POASTXTPUNSAFECHARMAX=2           [ Max POASTXTPUNSAFECHARS char array index  ]                        
+  
+ [ Variables ]
+ POASTXTPCNTR=NUMBER               [ Generic subscript or counter              ]
+ POASTXTPLASTPOS=NUMBER            [ Position within a string                  ]
+ POASTXTPSTRING=CHARACTER          [ String used with leading/trailing space   ]
+ POASTXTPLISTSTRING=CHARACTER      [ String used with Code/Number List         ]
+ POASTXTPCODELIST=CHARACTER        [ String used with Code List routine        ]
+ POASTXTPUNSAFEIN=CHARACTER        [ String input to the Unsafe routine        ]
+ POASTXTPUNSAFEOUT=CHARACTER       [ String output from the Unsafe routine     ]
+ POASTXTPSINGLECHAR=CHARACTER(1)   [ Generic single character                  ]
+ POASTXTPDONE=NUMBER               [ Generic done boolean                      ]
+ POASTXTPNUMRANGE=CHARACTER        [ One number or number range                ]
+ POASTXTPNUM1CHR=CHARACTER         [ Character value of "From" number range    ]
+ POASTXTPNUM2CHR=CHARACTER         [ Character value of "To" number range      ]
+ POASTXTPNUM1NUM=NUMBER            [ Number value of "From" number range       ]
+ POASTXTPNUM2NUM=NUMBER            [ Number value of "To" number range         ]
+ POASTXTPRANGECOUNT=NUMBER         [ Count of number/number ranges             ]
+ POASTXTPDELIMPOS=NUMBER           [ Position where delimiter located in string]
+ POASTXTPLISTDELIMS=CHARACTER      [ Each byte to be used as a list delimiter  ]
+ POASTXTPRELPOS=NUMBER             [ Relative position in segment of a comma   ] 
+ POASTXTPFIRSTPOS=NUMBER           [ First position of current delimiter       ]
+ POASTXTPDASHPOS=NUMBER            [ Position where dash located in string     ]
+ POASTXTPERROR=CHARACTER           [ Error Message                             ]
+ POASTXTPERRORCD=NUMBER            [ Error Code                                ] 
+ POASTXTPI=NUMBER                  [ Generic loop control                      ]
+ POASTXTPLISTCOUNT=NUMBER          [ Count of parsed List values               ]
+ POASTXTPLISTSTOP=NUMBER           [ Stop position of search for next comma    ]
+ POASTXTPNULLVAL=NUMBER            [ Boolean indicating null list value        ]
+ POASTXTPDELIMFOUND=NUMBER         [ Boolean indicating a delimiter was found  ]
+ POASTXTPEDINPFMT=CHARACTER(1)     [ Numeric Edit input data format            ]
+ POASTXTPEDOUTLEN=NUMBER           [ Numeric Edit output data length           ]
+ POASTXTPEDNUM=NUMBER              [ Numeric Edit return NUMBER                ]
+ POASTXTPEDMNY=MONEY               [ Numeric Edit return MONEY                 ]
+ POASTXTPEDCHR=CHARACTER           [ Numeric Edit return CHARACTER             ]
+ POASTXTPEDDAT=DATE                [ Numeric Edit return DATE                  ]
+ POASTXTPEDTIM=NUMBER              [ Numeric Edit return TIME                  ]
+ POASTXTPEDRAT=RATE                [ Numeric Edit return RATE                  ]
+ POASTXTPEDVALIDCHAR=CHARACTER     [ Numeric Edit valid character list         ]
+ POASTXTPBACKSPACE=CHARACTER(1)    [ Backspace                                 ]
+ POASTXTPFF=CHARACTER(1)           [ Form Feed                                 ]
+ POASTXTPLF=CHARACTER(1)           [ Line feed                                 ]
+ POASTXTPCR=CHARACTER(1)           [ Carriage Return                           ]
+ POASTXTPTAB=CHARACTER(1)          [ Tab                                       ]
+ POASTXTPDOUBLEQUOTE=CHARACTER(1)  [ Double Quote                              ]
+ POASTXTPBACKSLASH=CHARACTER(1)    [ Backslash                                 ]
+  
+ [ Arrays ]
+ POASTXTPUNSAFECHARS=CHARACTER(1) ARRAY(2) [ Unsafe Characters (" and \, etc)  ]
+ POASTXTPNUMRNG=NUMBER ARRAY(99,1) [ Number Ranges                             ]
+                                   [ 1st dimension = POASTXTPMAXNUMRANGE       ]
+                                   [ 2nd dimension = 0-From 1-Thru             ]
+ POASTXTPLISTVALUE=CHARACTER ARRAY(50) [List values                            ]
+

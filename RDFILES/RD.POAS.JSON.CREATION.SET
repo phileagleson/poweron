@@ -1,0 +1,40 @@
+[
+ RD.POAS.JSON.CREATION.SET
+
+-Abstract:
+ This include file contains variable initializations needed for
+ PowerOn as a Service programs to use standardized
+ procedures to create response JSON.
+
+-History:
+ Proj. 17.067 Release 2018.00 2/9/2018 William Morgan Original Author
+
+-Details:
+ The variables initialized are required for the following include files:
+ RD.JSON.CREATION.SET
+ RD.JSON.CREATION.PRO
+
+ This set of include files streamlines the development of PowerOn as a
+ Service specfiles by providing a standardized process to create
+ response JSON.
+
+ Special characters are required to identify the beginning and the
+ end of a JSON so that the Java service can extract the response
+ JSON from the other messages being sent by Episys Quest.
+
+-Dependences:
+ RD.POAS.CONSTANTS.DEF
+ RD.JSON.CREATION.*
+
+-History:
+ Proj 18.016 Release 2019.00 8/8/2018 kschweers.  Added START/CONTINUE/END tags.
+]
+
+Q=CTRLCHR(34)
+BEGINMSG=CTRLCHR(254)
+ENDMSG=CTRLCHR(252)
+ESCAPECHAR=CTRLCHR(27)
+ERRORMSGCTR=0
+STATUSTYPE="Success"
+MSGLENGTH=0
+JSONCTR=0

@@ -1,0 +1,254 @@
+[
+ RD.POAS.PMLF.PARM.LETRFIL.PRO
+
+-Abstract:
+ This include file contains procedures to parse a Parameter Letter File. 
+
+-History:
+ Proj. 17.109 Release 2018.01 05/16/2018 kschweers - Initially created.
+
+-Details:
+ Read each line of a Parameter Letter File.  Parse the data on the record into 
+ individual parameters using the pipe "|" as the delimiter.  Store each 
+ parameter into its own array using the record number as the subscript.
+
+-Dependences:
+ RD.POAS.CONSTANTS.*
+ RD.POAS.PMLF.PARM.LETRFIL.*
+ RD.POAS.TXTP.TEXTPARSE.*
+ RD.POAS.VARIABLES.DEF
+]
+
+[
+ This procedure reads a Parameter Letter File, and parses out parameters.  A 
+ parameter may just be a value or a keyword:value pair.  The keywords and values
+ are stored in parameter arrays. 
+ 
+ Pass:   POASPMLFINPUTFILE - The name of the input Parameter Letter File.
+ Return: POASPMLFPARM1* - Arrays containing parameter keywords and values.
+         POASPMLFNUMRECS - Number of records read from the file.
+         POASPMLFNUMPARMS - The greatest number of parameters on one record.
+         POASPMLFERROR - Any non-blank value means an error was encountered.
+]
+PROCEDURE POASPMLFREADPARSE
+ CALL POASPMLFINIT
+
+ FILEOPEN("LETTER",POASPMLFINPUTFILE,"READ",POASPMLFNUM,POASPMLFERROR)
+ IF POASPMLFERROR<>"" THEN
+  DO
+   POASPMLFERROR=POASPMLFINPUTFILE+" letterfile not found"
+  END 
+ ELSE
+  DO
+   POASPMLFRECPARMS=0
+   WHILE POASPMLFERROR=""
+    DO
+     FILEREADLINE(POASPMLFNUM,POASPMLFLINE,POASPMLFERROR)
+     IF POASPMLFLINE<>"" THEN
+      DO
+       CALL POASPMLFPARSE
+      END
+    END
+   FILECLOSE(POASPMLFNUM,POASPMLFERROR)  
+  END
+END
+
+[
+ Process all the parameters found on the current record.  This might be multiple
+ parameters delimited by the pipe "|".  Or it could be a single parameter on 
+ the record by itself.  The parameter could be a single value, or it could be 
+ a keyword:value pair.
+ 
+ Pass:   POASPMLFLINE - One line from the Parameter Letter File.
+ Return: POASPMLFPARM* - Arrays containing the parsed parameter values.
+         POASPMLFNUMPARMS - Greatest number of parameters on any one record.
+         POASPMLFERROR - Any non-blank value means an error was encountered.
+]
+PROCEDURE POASPMLFPARSE  
+ POASPMLFNUMRECS=POASPMLFNUMRECS+1
+ POASPMLFRECPARMS=0
+ POASPMLFLINEDONE=FALSE
+ 
+ [ Remove any unsafe characters. ]
+ POASTXTPUNSAFEIN=POASPMLFLINE
+ CALL POASTXTPREMOVEUNSAFE
+ POASPMLFLINE=POASTXTPUNSAFEOUT
+ 
+ [ Parse out values using the pipe delimiter. ]
+ POASTXTPLISTSTRING=POASPMLFLINE
+ POASTXTPLISTDELIMS=PIPE
+ CALL POASTXTPLISTPARSE
+ 
+ [ Loop through all the parameters found on the current record. ]
+ FOR POASPMLFI=1 TO POASTXTPLISTCOUNT 
+  DO
+
+   [ Get the parameter into POASPMLFPARM ]
+   POASPMLFPARM=POASTXTPLISTVALUE(POASPMLFI)  
+
+   [ Add the parameter value to the returned parameter arrays. ]
+   POASPMLFRECPARMS=POASPMLFRECPARMS+1
+   IF POASPMLFRECPARMS>POASPMLFMAXPARMS THEN 
+    DO
+     POASPMLFERROR="POASPMLF: Maximum number of parameters exceeded"
+     POASPMLFLINEDONE=TRUE
+    END
+   ELSE
+    DO
+     [ Break the parameter into keyword and value. ]
+     CALL POASPMLFKEYWORDVALUE         
+     [ Add the keyword/value to the returned arrays. ]
+     CALL POASPMLFBUILDARRAYS
+    END
+
+  END [ End loop through parameters on current record. ]
+ 
+ [ Track the greatest number of parameters found on any single record. ]
+ IF POASPMLFRECPARMS>POASPMLFNUMPARMS THEN
+  DO 
+   POASPMLFNUMPARMS=POASPMLFRECPARMS
+  END
+END    
+
+[
+ Check the parameter for a keyword:value pair.  If found, break the parameter
+ into keyword and value variables.  If not, then the parameter text becomes the
+ parameter value, and there is no keyword.
+ 
+ Pass:   POASPMLFPARM - The parameter text being processed.
+ Return: POASPMLFKEY - The parameter keyword.
+         POASPMLFVALUE - The parameter value.
+]
+PROCEDURE POASPMLFKEYWORDVALUE
+ POASPMLFKEY=""
+ POASPMLFVALUE="" 
+
+ POASPMLFCOLONPOS=CHARACTERSEARCH(POASPMLFPARM,COLON)
+
+ [ Process keyword:value pair. ]
+ IF POASPMLFCOLONPOS>0 THEN 
+  DO 
+   POASPMLFKEY=SEGMENT(POASPMLFPARM,1,POASPMLFCOLONPOS-1)
+   IF LENGTH(POASPMLFPARM)>POASPMLFCOLONPOS THEN 
+    DO
+     POASPMLFVALUE=SEGMENT(POASPMLFPARM,POASPMLFCOLONPOS+1,
+      LENGTH(POASPMLFPARM))
+    END
+  END 
+ [ Just a single parameter value; no keyword. ]
+ ELSE
+  DO
+   POASPMLFVALUE=POASPMLFPARM
+  END
+
+ [ Remove leading and trailing spaces. ]
+ IF POASPMLFKEY<>"" THEN 
+  DO
+   POASTXTPSTRING=POASPMLFKEY
+   CALL POASTXTPNOLEADTRAIL
+   POASPMLFKEY=POASTXTPSTRING
+  END 
+ IF POASPMLFVALUE<>"" THEN 
+  DO
+   POASTXTPSTRING=POASPMLFVALUE
+   CALL POASTXTPNOLEADTRAIL
+   POASPMLFVALUE=POASTXTPSTRING
+  END
+END                     
+          
+[
+ Add the current parameter to the applicable arrays.  POASPMLFRECPARMS  
+ determines which array the parameter is added to (each array = 1 parameter 
+ across all records).  The second subscript stores keywords and values.  
+
+ Pass:   POASPMLFKEY - The parameter keyword.
+         POASPMLFVALUE - The parameter value.
+         POASPMLFRECPARMS - The relative parameter being processed.
+ Return: POASPMLFPARM* - Arrays containing parameter keywords and values.
+]          
+PROCEDURE POASPMLFBUILDARRAYS         
+ [ POASPMLFRECPARMS is the relative parameter number for the current record. ]         
+ IF POASPMLFRECPARMS=1 THEN 
+  DO 
+   POASPMLFPARM1(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARM1(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END
+ ELSE IF POASPMLFRECPARMS=2 THEN 
+  DO 
+   POASPMLFPARM2(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARM2(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END
+ ELSE IF POASPMLFRECPARMS=3 THEN 
+  DO 
+   POASPMLFPARM3(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARM3(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END
+ ELSE IF POASPMLFRECPARMS=4 THEN 
+  DO 
+   POASPMLFPARM4(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARM4(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END
+ ELSE IF POASPMLFRECPARMS=5 THEN 
+  DO 
+   POASPMLFPARM5(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARM5(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END
+ ELSE IF POASPMLFRECPARMS=6 THEN 
+  DO 
+   POASPMLFPARM6(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARM6(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END
+ ELSE IF POASPMLFRECPARMS=7 THEN 
+  DO 
+   POASPMLFPARM7(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARM7(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END  
+ ELSE IF POASPMLFRECPARMS=8 THEN 
+  DO 
+   POASPMLFPARM8(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARM8(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END
+ ELSE IF POASPMLFRECPARMS=9 THEN 
+  DO 
+   POASPMLFPARM9(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARM9(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END
+ ELSE IF POASPMLFRECPARMS=10 THEN 
+  DO 
+   POASPMLFPARMA(POASPMLFNUMRECS,POASPMLFSUBKWD)=POASPMLFKEY
+   POASPMLFPARMA(POASPMLFNUMRECS,POASPMLFSUBVAL)=POASPMLFVALUE
+  END
+END
+
+[
+ Perform initialization for each call.
+]
+PROCEDURE POASPMLFINIT
+ POASPMLFNUMRECS=0
+ POASPMLFNUMPARMS=0
+ POASPMLFERROR=""
+ 
+ FOR I=1 TO POASPMLFMAXRECS
+  DO
+   POASPMLFPARM1(I,POASPMLFSUBKWD)=""
+   POASPMLFPARM1(I,POASPMLFSUBVAL)=""
+   POASPMLFPARM2(I,POASPMLFSUBKWD)=""
+   POASPMLFPARM2(I,POASPMLFSUBVAL)=""
+   POASPMLFPARM3(I,POASPMLFSUBKWD)=""
+   POASPMLFPARM3(I,POASPMLFSUBVAL)=""
+   POASPMLFPARM4(I,POASPMLFSUBKWD)=""
+   POASPMLFPARM4(I,POASPMLFSUBVAL)=""
+   POASPMLFPARM5(I,POASPMLFSUBKWD)=""
+   POASPMLFPARM5(I,POASPMLFSUBVAL)=""
+   POASPMLFPARM6(I,POASPMLFSUBKWD)=""
+   POASPMLFPARM6(I,POASPMLFSUBVAL)=""
+   POASPMLFPARM7(I,POASPMLFSUBKWD)=""
+   POASPMLFPARM7(I,POASPMLFSUBVAL)=""
+   POASPMLFPARM8(I,POASPMLFSUBKWD)=""
+   POASPMLFPARM8(I,POASPMLFSUBVAL)=""
+   POASPMLFPARM9(I,POASPMLFSUBKWD)=""
+   POASPMLFPARM9(I,POASPMLFSUBVAL)=""  
+   POASPMLFPARMA(I,POASPMLFSUBKWD)=""  
+   POASPMLFPARMA(I,POASPMLFSUBVAL)=""
+  END
+END

@@ -1,0 +1,18 @@
+[
+ RD.POAS.CONSTANTS.SET
+
+-Abstract:
+ This is include file contains common constant definitions.
+  
+-History:
+ Proj. 17.109 Release 2018.01 05/14/2018 kschweers - Initially created.
+
+-Details:
+ Commonly used constant values used by POAS are defined here.  
+
+-Dependencies:
+ None.
+]
+
+DOUBLEQUOTE=CTRLCHR(34)
+ESCAPECHR=CTRLCHR(27)
